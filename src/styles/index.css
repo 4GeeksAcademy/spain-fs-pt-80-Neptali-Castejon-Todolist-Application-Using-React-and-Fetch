@@ -10,3 +10,139 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+
+:root {
+    --color-light-gray: #f4f2f2;
+    --color-dark-gray: rgb(116, 116, 116);
+    --color-red: rgb(171, 107, 108);
+    --color-background: rgb(232, 217, 217);
+    --font-size-regular: 1.5rem;
+    --font-size-large: 5rem;
+    --padding-small: 0.625rem;
+    --bs-link-hover-color-rgb: 255, 0, 0; /* Define el color hover deseado, por ejemplo rojo */
+    --bs-link-color-rgb: 0, 0, 255; /* Define el color por defecto deseado, por ejemplo azul */
+    --bs-link-opacity: 1; /* Define la opacidad deseada */
+}
+
+/* Contenedor Principal */
+.todo-app__container {
+    max-width: 550px;
+    width: 100%;
+}
+
+/* Contenido Principal */
+.todo-app__content {
+    border: 1px solid var(--color-light-gray);
+}
+
+/* Título Principal */
+.todo-app__title {
+    font-size: var(--font-size-large);
+    font-weight: lighter;
+    color: var(--color-background);
+}
+
+/* Input de Tarea */
+.todo-app__input {
+    height: auto;
+    border: none;
+    border-radius: 0;
+    font-size: var(--font-size-regular);
+    font-weight: lighter;
+    color: var(--color-dark-gray);
+    padding: var(--padding-small);
+}
+
+.todo-app__input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Lista de Tareas */
+.todo-app__list {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+/* Elemento de Lista */
+.todo-app__item {
+    border-bottom: 1px solid var(--color-light-gray);
+    font-size: var(--font-size-regular);
+    font-weight: lighter;
+    color: var(--color-dark-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--padding-small);
+}
+
+/* Botón de Borrado */
+.todo-app__delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    padding: 0;
+}
+
+.todo-app__delete-icon {
+    color: var(--color-red);
+    cursor: pointer;
+}
+
+/* Footer */
+.todo-app__footer {
+    padding: var(--padding-small);
+}
+
+/* Texto de Elementos Restantes */
+.todo-app__remaining {
+    font-weight: lighter;
+    color: var(--color-dark-gray);
+    margin: 0;
+}
+
+/* Botón de Limpieza */
+.todo-app__clear-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-dark-gray);
+}
+
+.todo-app__clear-icon {
+    color: var(--color-red);
+}
+
+/* Formulario de Entrada */
+.todo-app__form {
+    height: 60px;
+    border-bottom: 1px solid var(--color-light-gray);
+    display: flex;
+    align-items: center;
+}
+
+/* Estilos básicos para el ícono */
+.icon-link {
+    display: inline-flex;
+    gap: .375rem; /* Espacio entre el ícono y el texto */
+    align-items: center;
+    color: var(--color-red);
+    -webkit-text-decoration-color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 0.5));
+    text-decoration-color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 0.5));
+    text-underline-offset: 0.25em;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    text-decoration: none;
+    transition: color 0.3s ease; /* Suavizar cambios de color */
+}
+
+/* Estilos en hover */
+.icon-link-hover:hover {
+    --bs-link-color-rgb: var(--bs-link-hover-color-rgb); /* Cambiar color en hover */
+    -webkit-text-decoration-color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 0.5));
+    text-decoration-color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 0.5));
+}
