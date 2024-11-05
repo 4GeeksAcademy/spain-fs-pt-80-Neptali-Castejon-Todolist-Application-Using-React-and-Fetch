@@ -35,14 +35,12 @@ const Home = () => {
 
 	const crearUser = async () => {
 		try {
-			const resp = await fetch('https://playground.4geeks.com/todo/users/nepta', {
+			await fetch('https://playground.4geeks.com/todo/users/nepta', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 			});
-			const data = await resp.json();
-			console.log(data);
 		} catch (error) {
 			console.error("Error creating user:", error);
 		}
@@ -50,7 +48,7 @@ const Home = () => {
 
 	const createTodo = async (todo) => {
 		try {
-			const resp = await fetch('https://playground.4geeks.com/todo/todos/nepta', {
+			await fetch('https://playground.4geeks.com/todo/todos/nepta', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -60,8 +58,6 @@ const Home = () => {
 					is_done: false
 				})
 			});
-			const data = await resp.json();
-			console.log(data);
 		} catch (error) {
 			console.error("Error creating todo:", error);
 		}
@@ -71,7 +67,6 @@ const Home = () => {
 		try {
 			const resp = await fetch('https://playground.4geeks.com/todo/users/nepta');
 			const data = await resp.json();
-			console.log(data);
 			setTodos(data.todos || []); // Usa la respuesta para establecer los todos
 		} catch (error) {
 			console.error("Error fetching data:", error);
