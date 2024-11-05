@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import TodoFooter from "./TodoFooter";
+import TodoHeader from "./TodoHeader";
 
 const Home = () => {
 	// Estado para almacenar el valor de la tarea actual
@@ -95,10 +97,10 @@ const Home = () => {
 		<main className="container"> 
             <div className="todo-app d-flex justify-content-center align-items-center vh-100">
                 <div className="todo-app__container text-center">
-					<header>
-						<h1 className="todo-app__title">todosList</h1>
-					</header>
 
+					{/*Componente para el título*/}
+					<TodoHeader title="todoList"/>
+					
                     <div className="todo-app__content shadow p-0">
                         <form onSubmit={handleSubmit} className="todo-app__form">
 							<input
@@ -137,9 +139,8 @@ const Home = () => {
 							)) : ''} 
 						</ul>
 
-                        <footer className="todo-app__footer d-flex align-items-center justify-content-between px-4">
-							<p className="todo-app__remaining text-start">{todos.length} items left </p>
-						</footer>
+						{/* Componente para el footer*/}
+                        <TodoFooter todos={todos} onClear={()=> setTodos([])}/>
                     </div>
                 </div>
             </div>
