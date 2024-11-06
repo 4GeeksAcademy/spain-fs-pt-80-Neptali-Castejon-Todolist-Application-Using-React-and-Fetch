@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TodoFooter from "./TodoFooter";
 import TodoHeader from "./TodoHeader";
+import TodoInput from "./TodoInput";
 
 const Home = () => {
 	// Estado para almacenar el valor de la tarea actual
@@ -20,10 +21,10 @@ const Home = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (task.trim()) {
-			const newTodo = { label: task, id: Date.now() }; // Agrega tarea con un ID único
-			setTodos([...todos, newTodo]); // Actualiza el estado local
-			setTask(''); // Limpia el campo de entrada
-			createTodo(newTodo); // También llama a la función para crear el todo en el servidor
+			const newTodo = { label: task, id: Date.now() };
+			setTodos([...todos, newTodo]);
+			setTask('');
+			createTodo(newTodo); // llama a la función para crear el todo en el servidor
 		}
 	};
 
@@ -37,7 +38,7 @@ const Home = () => {
 
 	const crearUser = async () => {
 		try {
-			await fetch('https://playground.4geeks.com/todo/users/nepta', {
+			await fetch('https://playground.4geeks.com/todo/users/castejon', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -50,7 +51,7 @@ const Home = () => {
 
 	const createTodo = async (todo) => {
 		try {
-			await fetch('https://playground.4geeks.com/todo/todos/nepta', {
+			await fetch('https://playground.4geeks.com/todo/todos/castejon', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -67,7 +68,7 @@ const Home = () => {
 
 	const getData = async () => {
 		try {
-			const resp = await fetch('https://playground.4geeks.com/todo/users/nepta');
+			const resp = await fetch('https://playground.4geeks.com/todo/users/castejon');
 			const data = await resp.json();
 			setTodos(data.todos || []); // Usa la respuesta para establecer los todos
 		} catch (error) {
@@ -102,17 +103,13 @@ const Home = () => {
 					<TodoHeader title="todoList"/>
 					
                     <div className="todo-app__content shadow p-0">
-                        <form onSubmit={handleSubmit} className="todo-app__form">
-							<input
-								type="text"
-								onChange={handleChange}
-								value={task} 
-								className="todo-app__input form-control ps-5"
-								placeholder="What needs to be done?"
-								aria-label="New task input"
-								title="Type a new task and press Enter to add it"
-							/>
-						</form>
+
+						{/* Componente para ingresar nuevas tareas */}
+						<TodoInput 
+                            inputValue={task}
+                            handleChange={handleChange}
+                            handleSubmit={handleSubmit}
+                        />
 
                         <ul className="todo-app__list d-flex flex-column p-0 m-0 w-100">
 							{todos.length > 0 ?
