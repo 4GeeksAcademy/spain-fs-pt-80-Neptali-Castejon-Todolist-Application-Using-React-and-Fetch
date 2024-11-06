@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from "react";
 
 const TodoList = ({todos, visibleIcons, onDelete, handleMouseEnter, handleMouseLeave}) => {
@@ -27,6 +28,19 @@ const TodoList = ({todos, visibleIcons, onDelete, handleMouseEnter, handleMouseL
             )) : ''} 
         </ul>
     )
+}
+
+TodoList.proptypes = {
+    todos: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            label: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+    visibleIcons: PropTypes.object.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    handleMouseEnter: PropTypes.func.isRequired,
+    handleMouseLeave: PropTypes.func.isRequired,
 }
 
 export default TodoList;

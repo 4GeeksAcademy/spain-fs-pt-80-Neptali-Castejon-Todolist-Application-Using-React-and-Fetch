@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from "react";
 
 const TodoFooter = ({todos}) => {
@@ -8,5 +9,14 @@ const TodoFooter = ({todos}) => {
         </footer>
     )
 }
+
+TodoFooter.propTypes = {
+    todos: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            label: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+};
 
 export default TodoFooter;

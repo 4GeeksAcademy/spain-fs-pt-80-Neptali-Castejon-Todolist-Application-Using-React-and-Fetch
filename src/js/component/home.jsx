@@ -51,20 +51,23 @@ const Home = () => {
 	// Función para crear tareas en el servidor
 	const createTodo = async (todo) => {
 		try {
-			await fetch('https://playground.4geeks.com/todo/todos/castejon', {
+			const response = await fetch('https://playground.4geeks.com/todo/todos/castejon', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					label: todo.label, // Usa el valor de la tarea ingresada
+					label: todo.label,
 					is_done: false
 				})
 			});
+			const createdTodo = await response.json(); // Obtener la respuesta del servidor
+			setTodos([...todos, { id: createdTodo.id, label: todo.label }]); // Agregar el ID real al estado
 		} catch (error) {
 			console.error("Error creating todo:", error);
 		}
 	};
+	
 
 	// Función para obtener datos de el servidor
 	const getData = async () => {
@@ -95,7 +98,7 @@ const Home = () => {
 			console.error("Error deleting todo:", error);
 		}
 	};
-
+	
 	return (
 		<main className="container"> 
             <div className="todo-app d-flex justify-content-center align-items-center vh-100">

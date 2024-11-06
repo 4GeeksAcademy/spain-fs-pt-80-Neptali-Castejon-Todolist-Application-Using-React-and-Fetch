@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from "react";
 
 const TodoInput = ({ handleSubmit, handleChange, inputValue }) => {
@@ -14,6 +15,12 @@ const TodoInput = ({ handleSubmit, handleChange, inputValue }) => {
             />
         </form>
     );
+};
+
+TodoInput.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    inputValue: PropTypes.string.isRequired
 };
 
 export default TodoInput;
