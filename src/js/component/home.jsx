@@ -99,6 +99,15 @@ const Home = () => {
 		}
 	};
 	
+	// Funciones para mostrar y ocultar el icono de borrado
+	const handleMouseEnter = (id) => {
+        setVisibleIcons((prev) => ({ ...prev, [id]: true }));
+    };
+
+    const handleMouseLeave = (id) => {
+        setVisibleIcons((prev) => ({ ...prev, [id]: false }));
+    };
+
 	return (
 		<main className="container"> 
             <div className="todo-app d-flex justify-content-center align-items-center vh-100">
@@ -121,8 +130,8 @@ const Home = () => {
 							todos={todos}
 							visibleIcons={visibleIcons}
 							onDelete={handleClick}
-							handleMouseEnter={(id) => setVisibleIcons((prev) => ({ ...prev, [id]: true }))}
-							handleMouseLeave={(id) => setVisibleIcons((prev) => ({ ...prev, [id]: false }))}
+							handleMouseEnter={handleMouseEnter}
+                            handleMouseLeave={handleMouseLeave}
 						/>
                         
 						{/* Componente para el footer*/}
