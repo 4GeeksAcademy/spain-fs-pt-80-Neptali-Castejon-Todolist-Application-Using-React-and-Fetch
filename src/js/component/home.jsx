@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TodoFooter from "./TodoFooter";
 import TodoHeader from "./TodoHeader";
 import TodoInput from "./TodoInput";
+import TodoList from "./TodoList";
 
 const Home = () => {
 	// Estado para almacenar el valor de la tarea actual
@@ -17,14 +18,14 @@ const Home = () => {
 	// Manejar el cambio de valor en el campo de entrada
 	const handleChange = (e) => setTask(e.target.value);
 
-	// Manejar el envío del formulario para agregar una nueva tarea
+	// Manejar el envío del formulario
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (task.trim()) {
 			const newTodo = { label: task, id: Date.now() };
 			setTodos([...todos, newTodo]);
 			setTask('');
-			createTodo(newTodo); // llama a la función para crear el todo en el servidor
+			createTodo(newTodo); // Crear la tarea en el servidor
 		}
 	};
 
@@ -33,9 +34,7 @@ const Home = () => {
 		deleteTodo(id); // Llama a la función para eliminar la tarea del servidor
 	};
 
-	const handleMouseEnter = (id) => setVisibleIcons((prev) => ({ ...prev, [id]: true }));
-	const handleMouseLeave = (id) => setVisibleIcons((prev) => ({ ...prev, [id]: false }));
-
+	// Funcion para crear usuario en el servidor
 	const crearUser = async () => {
 		try {
 			await fetch('https://playground.4geeks.com/todo/users/castejon', {
@@ -49,6 +48,7 @@ const Home = () => {
 		}
 	};
 
+	// Función para crear tareas en el servidor
 	const createTodo = async (todo) => {
 		try {
 			await fetch('https://playground.4geeks.com/todo/todos/castejon', {
@@ -66,16 +66,18 @@ const Home = () => {
 		}
 	};
 
+	// Función para obtener datos de el servidor
 	const getData = async () => {
 		try {
 			const resp = await fetch('https://playground.4geeks.com/todo/users/castejon');
 			const data = await resp.json();
-			setTodos(data.todos || []); // Usa la respuesta para establecer los todos
+			setTodos(data.todos.map(todo => ({ ...todo, id: todo.id }))); // Actualiza los todos con el ID real
 		} catch (error) {
 			console.error("Error fetching data:", error);
 		}
 	};
 
+	// Función para eliminar tareas del servidor
 	const deleteTodo = async (id) => {
 		try {
 			const resp = await fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
@@ -111,33 +113,17 @@ const Home = () => {
                             handleSubmit={handleSubmit}
                         />
 
-                        <ul className="todo-app__list d-flex flex-column p-0 m-0 w-100">
-							{todos.length > 0 ?
-								todos.map((element) => (
-								<li
-									key={element.id}
-									className="todo-app__item d-flex align-items-center justify-content-between ps-5 pe-4"
-									title="Task item"
-									onMouseEnter={() => handleMouseEnter(element.id)}
-                    				onMouseLeave={() => handleMouseLeave(element.id)}
-								>
-									{element.label}
-									{visibleIcons[element.id] && (
-										<a 
-											className="todo-app__delete-btn"
-											onClick={() => handleClick(element.id)} // Usar ID para eliminar
-											aria-label="Delete task"
-											title="Delete this task"
-										>
-											<i className="todo-app__delete-icon fa-solid fa-xmark fs-4"></i>
-										</a>
-									)}
-								</li>
-							)) : ''} 
-						</ul>
-
+ 						{/* Componente para mostrar la lista de tareas */}
+						<TodoList 
+							todos={todos}
+							visibleIcons={visibleIcons}
+							onDelete={handleClick}
+							handleMouseEnter={(id) => setVisibleIcons((prev) => ({ ...prev, [id]: true }))}
+							handleMouseLeave={(id) => setVisibleIcons((prev) => ({ ...prev, [id]: false }))}
+						/>
+                        
 						{/* Componente para el footer*/}
-                        <TodoFooter todos={todos} onClear={()=> setTodos([])}/>
+                        <TodoFooter todos={todos}/>
                     </div>
                 </div>
             </div>
