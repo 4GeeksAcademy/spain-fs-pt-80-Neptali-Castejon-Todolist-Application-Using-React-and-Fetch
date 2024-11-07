@@ -40,7 +40,7 @@ const Home = () => {
 		e.preventDefault();
 		if (task.trim()) {
 			const newTodo = { label: task, id: Date.now() };
-			setTodos([...todos, newTodo]);
+			//setTodos([...todos, newTodo]);
 			setTask('');
 			createTodo(newTodo); // Crear la tarea en el servidor
 		}
@@ -151,29 +151,34 @@ const Home = () => {
 	
 	return (
 		<main className="container"> 
-            <div className="todo-app d-flex justify-content-center align-items-center vh-100">
-                <div className="todo-app__container text-center">
+			<div className="todo-app d-flex justify-content-center align-items-center vh-100">
+				<div className="todo-app__container text-center">
 
-					{/*Componente para el título*/}
-					<TodoHeader title="todoList"/>
+					{/* Título principal de la aplicación */}
+					<TodoHeader title="todoList" />
 					
-					{/*Componente para el usuario*/}
+					{/* Formulario para capturar y enviar el nombre del usuario */}
 					<UserForm 
 						userName={userName} 
 						handleUserChange={handleUserChange} 
 						handleSubmitUser={handleSubmitUser} 
 					/>
 
-					{!userExists ? ('') : (<h3 className="todo-app__subtitle mb-4">Welcome! {userName}, Here is your to-do list!</h3>)}
+					{/* Mensaje de bienvenida cuando el usuario ya ha ingresado su nombre */}
+					{!userExists ? '' : (<h3 className="todo-app__subtitle mb-4">Welcome! {userName}, Here is your to-do list!</h3>)}
 
-                    <div className="todo-app__content shadow p-0">
+					<div className="todo-app__content shadow p-0">
+						{/* Componentes principales: Sólo se muestran si el usuario existe */}
 						{!userExists ? '' : (
 							<>
+								{/* Input para agregar nuevas tareas */}
 								<TodoInput 
 									inputValue={task}
 									handleChange={handleChange}
 									handleSubmit={handleSubmit}
 								/>
+
+								{/* Lista de tareas: Muestra las tareas actuales y gestiona eventos de mouse */}
 								<TodoList 
 									todos={todos}
 									visibleIcons={visibleIcons}
@@ -181,14 +186,16 @@ const Home = () => {
 									handleMouseEnter={handleMouseEnter}
 									handleMouseLeave={handleMouseLeave}
 								/>
-								{/* Componente para el footer*/}
-								<TodoFooter todos={todos}/>
+
+								{/* Footer: Resumen de tareas y otras acciones */}
+								<TodoFooter todos={todos} />
 							</>
 						)}
-                    </div>
-                </div>
-            </div>
-        </main>   
+					</div>
+				</div>
+			</div>
+		</main>
+
 	);
 };
 
