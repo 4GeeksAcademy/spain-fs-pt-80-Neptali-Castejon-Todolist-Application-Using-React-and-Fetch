@@ -3,22 +3,39 @@ import TodoFooter from "./TodoFooter";
 import TodoHeader from "./TodoHeader";
 import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
+import UserForm from "./UserForm";
 
 const Home = () => {
 	// Estado para almacenar el valor de la tarea actual
 	const [task, setTask] = useState('');
 	const [todos, setTodos] = useState([]);
 	const [visibleIcons, setVisibleIcons] = useState({});
+	const [userName, setUserName] = useState('');
+	const [userExists, setUserExists] = useState(false);
 
-	useEffect(() => {
-		crearUser();
-		getData();
-	}, []);
-
-	// Manejar el cambio de valor en el campo de entrada
+	const handleUserChange = (e) => setUserName(e.target.value);
 	const handleChange = (e) => setTask(e.target.value);
 
-	// Manejar el envío del formulario
+	// Manejar el envío del formulario de usuario
+	const handleSubmitUser = async (e) => {
+		e.preventDefault();
+	
+		if (userName.toLowerCase().trim()) {
+			const userAlreadyExists = await checkUserExists();
+	
+			if (userAlreadyExists) {
+				setUserExists(true);
+				getData();
+			} else {
+				alert("Usuario no existe. Creando nuevo usuario...");
+				await crearUser();
+				setUserExists(true);
+				getData();
+			}
+		}
+	};
+	  
+	// Manejar el envío del formulario de task
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (task.trim()) {
@@ -34,15 +51,28 @@ const Home = () => {
 		deleteTodo(id); // Llama a la función para eliminar la tarea del servidor
 	};
 
-	// Funcion para crear usuario en el servidor
-	const crearUser = async () => {
+	const checkUserExists = async () => {
 		try {
-			await fetch('https://playground.4geeks.com/todo/users/castejon', {
-				method: 'POST',
+			const response = await fetch(`https://playground.4geeks.com/todo/users/${userName}`, {
+				method: 'GET',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
 				},
 			});
+			return response.ok;
+		} catch (error) {
+			console.error("Error checking user:", error);
+			return false;
+		}
+	};
+	
+	const crearUser = async () => {
+		try {
+			await fetch(`https://playground.4geeks.com/todo/users/${userName}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+			});
+			console.log("User created successfully");
 		} catch (error) {
 			console.error("Error creating user:", error);
 		}
@@ -51,35 +81,38 @@ const Home = () => {
 	// Función para crear tareas en el servidor
 	const createTodo = async (todo) => {
 		try {
-			const response = await fetch('https://playground.4geeks.com/todo/todos/castejon', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
+		   const response = await fetch(`https://playground.4geeks.com/todo/todos/${userName}`, {
+			  	method: 'POST',
+			  	headers: { 
+					'Content-Type': 'application/json' 
 				},
-				body: JSON.stringify({
-					label: todo.label,
-					is_done: false
+			  	body: JSON.stringify({ 
+					label: todo.label, is_done: false 
 				})
-			});
-			const createdTodo = await response.json(); // Obtener la respuesta del servidor
-			setTodos([...todos, { id: createdTodo.id, label: todo.label }]); // Agregar el ID real al estado
+		   });
+		   const createdTodo = await response.json();
+		   setTodos(prevTodos => [...prevTodos, { id: createdTodo.id, label: todo.label }]); // solo actualizas el estado una vez
 		} catch (error) {
-			console.error("Error creating todo:", error);
+		   console.error("Error creating todo:", error);
 		}
 	};
-	
-
+	 
 	// Función para obtener datos de el servidor
 	const getData = async () => {
 		try {
-			const resp = await fetch('https://playground.4geeks.com/todo/users/castejon');
+			const resp = await fetch(`https://playground.4geeks.com/todo/users/${userName}`);
 			const data = await resp.json();
-			setTodos(data.todos.map(todo => ({ ...todo, id: todo.id }))); // Actualiza los todos con el ID real
+			
+			if (data && Array.isArray(data.todos)) {
+				setTodos(data.todos.map(todo => ({ ...todo, id: todo.id }))); // Actualiza los todos con el ID real
+			} else {
+				console.error("No todos found or invalid response");
+			}
 		} catch (error) {
 			console.error("Error fetching data:", error);
 		}
 	};
-
+	
 	// Función para eliminar tareas del servidor
 	const deleteTodo = async (id) => {
 		try {
@@ -107,7 +140,15 @@ const Home = () => {
     const handleMouseLeave = (id) => {
         setVisibleIcons((prev) => ({ ...prev, [id]: false }));
     };
-
+	
+	useEffect(() => {
+		// Si el nombre de usuario cambia, reinicia el estado
+		if (userName.trim()) {
+			setUserExists(false);
+			setTodos([]); // Borra la lista de tareas
+		}
+	}, [userName]); // Ejecuta cada vez que cambia el nombre de usuario
+	
 	return (
 		<main className="container"> 
             <div className="todo-app d-flex justify-content-center align-items-center vh-100">
@@ -116,26 +157,34 @@ const Home = () => {
 					{/*Componente para el título*/}
 					<TodoHeader title="todoList"/>
 					
+					{/*Componente para el usuario*/}
+					<UserForm 
+						userName={userName} 
+						handleUserChange={handleUserChange} 
+						handleSubmitUser={handleSubmitUser} 
+					/>
+
+					{!userExists ? ('') : (<h3 className="todo-app__subtitle mb-4">Welcome! {userName}, Here is your to-do list!</h3>)}
+
                     <div className="todo-app__content shadow p-0">
-
-						{/* Componente para ingresar nuevas tareas */}
-						<TodoInput 
-                            inputValue={task}
-                            handleChange={handleChange}
-                            handleSubmit={handleSubmit}
-                        />
-
- 						{/* Componente para mostrar la lista de tareas */}
-						<TodoList 
-							todos={todos}
-							visibleIcons={visibleIcons}
-							onDelete={handleClick}
-							handleMouseEnter={handleMouseEnter}
-                            handleMouseLeave={handleMouseLeave}
-						/>
-                        
-						{/* Componente para el footer*/}
-                        <TodoFooter todos={todos}/>
+						{!userExists ? '' : (
+							<>
+								<TodoInput 
+									inputValue={task}
+									handleChange={handleChange}
+									handleSubmit={handleSubmit}
+								/>
+								<TodoList 
+									todos={todos}
+									visibleIcons={visibleIcons}
+									onDelete={handleClick}
+									handleMouseEnter={handleMouseEnter}
+									handleMouseLeave={handleMouseLeave}
+								/>
+								{/* Componente para el footer*/}
+								<TodoFooter todos={todos}/>
+							</>
+						)}
                     </div>
                 </div>
             </div>

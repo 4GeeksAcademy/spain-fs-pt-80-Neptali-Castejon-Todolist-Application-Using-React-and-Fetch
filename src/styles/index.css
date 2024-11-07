@@ -16,6 +16,7 @@
     --color-dark-gray: rgb(116, 116, 116);
     --color-red: rgb(171, 107, 108);
     --color-background: rgb(232, 217, 217);
+    --font-size-small: 1.3rem;
     --font-size-regular: 1.5rem;
     --font-size-large: 5rem;
     --padding-small: 0.625rem;
@@ -31,15 +32,38 @@
 }
 
 /* Contenido Principal */
-.todo-app__content {
+/* .todo-app__content {
     border: 1px solid var(--color-light-gray);
-}
+} */
 
 /* Título Principal */
 .todo-app__title {
     font-size: var(--font-size-large);
     font-weight: lighter;
     color: var(--color-background);
+}
+
+/* Subtitulo */
+.todo-app__subtitle {
+    font-size: var(--font-size-small);
+    font-weight: lighter;
+    color: var(--color-dark-gray);
+}
+
+/* Input de Usuario */
+.todo-user__input {
+    height: auto;
+    border: none;
+    border-radius: 0;
+    font-size: var(--font-size-regular);
+    font-weight: lighter;
+    color: var(--color-dark-gray);
+    padding: var(--padding-small);
+}
+
+.todo-user__input:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 /* Input de Tarea */
@@ -118,6 +142,13 @@
 }
 
 /* Formulario de Entrada */
+.todo-app__user-form {
+    height: 60px;
+    border-bottom: 1px solid var(--color-light-gray);
+    display: flex;
+    align-items: center;
+}
+
 .todo-app__form {
     height: 60px;
     border-bottom: 1px solid var(--color-light-gray);
