@@ -40,7 +40,6 @@ const Home = () => {
 		e.preventDefault();
 		if (task.trim()) {
 			const newTodo = { label: task, id: Date.now() };
-			//setTodos([...todos, newTodo]);
 			setTask('');
 			createTodo(newTodo); // Crear la tarea en el servidor
 		}
