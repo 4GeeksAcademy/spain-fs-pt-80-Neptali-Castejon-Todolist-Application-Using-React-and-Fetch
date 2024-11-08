@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-const TodoList = ({todos, visibleIcons, onDelete, handleMouseEnter, handleMouseLeave}) => {
+const TodoList = ({todos, handleMouseEnter, handleMouseLeave, visibleIcons, onDelete}) => {
     return(
         <ul className="todo-app__list d-flex flex-column p-0 m-0 w-100">
             {todos.length > 0 ?
